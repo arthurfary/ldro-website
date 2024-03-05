@@ -66,36 +66,26 @@ function Calendar() {
   //   })
   //
 
-  const scheduleItems = dates.map((item: ScheduleItem)=> {
-    // Extract day and month for formatted display
-    // const { day, month } = datetimeToDaysMonths(item.date);
-
-    return (
-      <CalendarItem>
-        <p>
-          <b>Data:</b> {item.date.toLocaleDateString()}
-        </p>
-
-        <p>
-          <b>Nome:</b> {item.name} - <b>{item.venue}</b>, {item.location}
-        </p>
-
-        <p>
-          <b>Descrição:</b> {item.description}
-        </p> 
-      </CalendarItem>
-    );
-  });
+  const EventDetails = ({ item }) => (
+  <>
+    <p><b>Data:</b> {item.date}</p>
+    <p><b>Nome:</b> {item.name} - <b>{item.venue}</b>, {item.location}</p>
+    <p><b>Descrição:</b> {item.description}</p>
+  </>
+  );
 
   return (
     <div>
       {true && ( // Check for items
         <CalendarBg>
           {fetchError && <p>{fetchError}</p>}
-          {scheduleItems}
+          {dates.map((item) => {
+            <CalendarItem>
+              <EventDetails item={item} /> 
+            </CalendarItem>
+          })}
         </CalendarBg>
       )}
-      test
     </div>
   );
 }
