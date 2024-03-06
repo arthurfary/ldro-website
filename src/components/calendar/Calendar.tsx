@@ -17,11 +17,11 @@ const CalendarItem = styled.div`
   height: fit-content;
 `
 interface ScheduleItem {
-        date: Date;
-        description: string;
-        name: string;
-        venue: string; // nome do lugar
-        location: string, // endereço
+    date: Date;
+    description: string;
+    name: string;
+    venue: string; // nome do lugar
+    location: string, // endereço
 }
 
 
@@ -55,37 +55,25 @@ function Calendar() {
     return { day: dt.getDate(), month: dt.getMonth() + 1 }; // Months are 0-indexed, so add 1
   };
 
-  // const dates: ScheduleItem[] = [];
-  // dates.push(
-  //   {
-  //       "date": new Date(Date.now()),
-  //       "description": "a melhor corrida de pien",
-  //       "name": "corrida de cavalo v8",
-  //       "venue": "fazenda do leandro",
-  //       "location": "piên"
-  //   })
-  //
-
-  const EventDetails = ({ item }) => (
-  <>
-    <p><b>Data:</b> {item.date}</p>
-    <p><b>Nome:</b> {item.name} - <b>{item.venue}</b>, {item.location}</p>
-    <p><b>Descrição:</b> {item.description}</p>
-  </>
+  const EventDetails: React.FC<{ item: ScheduleItem }> = ({ item }) => (
+    <div> {/* Fragment */}
+      <p>{"Data:" + item.date}</p>
+      <p><b>Nome:</b> {item.name} - <b>{item.venue}</b>, {item.location}</p>
+      <p><b>Descrição:</b> {item.description}</p>
+    </div>
   );
-
   return (
     <div>
-      {true && ( // Check for items
         <CalendarBg>
           {fetchError && <p>{fetchError}</p>}
           {dates.map((item) => {
-            <CalendarItem>
-              <EventDetails item={item} /> 
-            </CalendarItem>
+            return (
+              <CalendarItem>
+                <EventDetails item={item} /> 
+              </CalendarItem>
+            )
           })}
         </CalendarBg>
-      )}
     </div>
   );
 }
