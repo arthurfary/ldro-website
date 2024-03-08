@@ -4,7 +4,7 @@ import supabase from "../../config/supabaseClient"
 
 const CalendarBg = styled.div`
     background-color: red;
-    min-width: 300px;    
+    min-width: 300px;
     min-height: 300px;
 `
 
@@ -27,23 +27,28 @@ interface ScheduleItem {
 
 function Calendar() {
   const [dates, setDates] = useState<ScheduleItem[]>([])
-  const [fetchError, setFetchError] = useState<any>(null)
+  const [fetchError, setFetchError] = useState<boolean>(false)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const fetchDates = async () => {
+      setLoading(true)
+
       const {data, error} = await supabase
       .from('calendar')
       .select() //select all
 
       if (error) {
-        setFetchError('Could not fetch dates')
+        setFetchError(true)
         console.log(error)
         setDates([])
       }
       if (data) {
         setDates(data)
-        setFetchError(null)
+        setFetchError(false)
       }
+
+      setLoading(false)
     }
 
     return () => {
@@ -64,16 +69,20 @@ function Calendar() {
   );
   return (
     <div>
-        <CalendarBg>
-          {fetchError && <p>{fetchError}</p>}
-          {dates.map((item) => {
-            return (
+      <CalendarBg>
+        {loading ? (
+          <p>Carregando...</p>
+        ) : (
+          <>
+            {fetchError && <p>Erro ao buscar os dados.</p>}
+            {!fetchError && dates.map((item) => (
               <CalendarItem>
                 <EventDetails item={item} /> 
               </CalendarItem>
-            )
-          })}
-        </CalendarBg>
+            ))}
+          </>
+        )}
+      </CalendarBg>
     </div>
   );
 }
