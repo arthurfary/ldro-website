@@ -11,19 +11,19 @@
 ## Tarefas:
 
 ### Banco de dados:
-- [ ] Criar um banco de dados PostgreSQL
+- [x] Criar um banco de dados PostgreSQL
 - [ ] Criar tabelas para:
-    - Eventos (data, local, descrição, etc.)
-    - Dicas (título, conteúdo, etc.)
-    - Contatos (nome, email, telefone, etc.)
-    - Vídeos (link, título, descrição, etc.)
-    - Fotos (link, título, descrição, etc.)
+    - [x] Eventos (data, local, descrição, etc.)
+    - [ ] Dicas (título, conteúdo, etc.)
+    - [ ] Contatos (nome, email, telefone, etc.)
+    - [ ] Vídeos (link, título, descrição, etc.)
+    - [ ] Fotos (link, título, descrição, etc.)
 
 ### Programação:
 
 - [x] Instalar o React e as dependências necessárias
-- [ ] Criar a estrutura do projeto React
-- [ ] Conectar o banco de dados ao projeto React
+- [x] Criar a estrutura do projeto React
+- [x] Conectar o banco de dados ao projeto React
 - [ ] Criar a interface do usuário para:
     - [ ] Agenda de eventos
     - [ ] Dicas
