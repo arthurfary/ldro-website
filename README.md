@@ -33,4 +33,7 @@
     - [x] Carregar os dados do banco de dados
     - [ ] Filtrar e ordenar os dados
     - [ ] Exibir os dados na interface do usuário
+- [ ] Implementar sistema de login
+    - [x] Implementar login via supabase
+    - [ ] Usar token de login para validar as páginas que o usuário pode acessar
 - [ ] Testar o site e corrigir bugs
