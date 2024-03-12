@@ -1,7 +1,8 @@
+import Login from "../components/login/Login"
 
 const Backend = () => {
   return (
-    <h1>test</h1>
+    <Login></Login>
   )
 }
 
