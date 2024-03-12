@@ -30,7 +30,7 @@
     - [ ] Contato
     - [ ] Vídeos e fotos
 - [ ] Implementar a lógica para:
-    - [ ] Carregar os dados do banco de dados
+    - [x] Carregar os dados do banco de dados
     - [ ] Filtrar e ordenar os dados
     - [ ] Exibir os dados na interface do usuário
 - [ ] Testar o site e corrigir bugs
