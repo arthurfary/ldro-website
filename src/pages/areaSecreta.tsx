@@ -1,9 +1,9 @@
 import Login from "../components/login/Login"
 
-const Backend = () => {
+const LoginPage = () => {
   return (
-    <Login></Login>
+    <Login />
   )
 }
 
-export default Backend
+export default LoginPage
