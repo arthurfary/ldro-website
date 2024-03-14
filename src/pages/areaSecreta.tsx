@@ -1,8 +1,8 @@
 import Login from "../components/login/Login"
 
-const LoginPage = () => {
+const LoginPage = ({ setToken }: any) => {
   return (
-    <Login />
+    <Login setToken={setToken} />
   )
 }
 

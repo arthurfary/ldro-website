@@ -6,7 +6,8 @@ interface FormData {
   password: string;
 }
 
-const Login = () => {
+const Login = ({ setToken }: any) => {
+
   const [formData, setFormData] = useState<FormData>({ login: '', password: '' })
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -27,6 +28,7 @@ const Login = () => {
       password: formData.password
     })
 
+    setToken(data)
     console.log(data);
   }
 

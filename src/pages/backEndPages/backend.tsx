@@ -1,6 +1,6 @@
 const BackendPage = () => {
   return (
-    <></> // here will be the config page to add new content
+    <h1>This is the BackEnd</h1> // here will be the config page to add new content
   )
 }
 
