@@ -17,11 +17,11 @@ const CalendarItem = styled.div`
   height: fit-content;
 `
 interface ScheduleItem {
-    date: Date;
-    description: string;
-    name: string;
-    venue: string; // nome do lugar
-    location: string, // endereço
+  date: Date;
+  description: string;
+  name: string;
+  venue: string; // nome do lugar
+  location: string, // endereço
 }
 
 
@@ -34,9 +34,9 @@ function Calendar() {
     const fetchDates = async () => {
       setLoading(true)
 
-      const {data, error} = await supabase
-      .from('calendar')
-      .select() //select all
+      const { data, error } = await supabase
+        .from('calendar')
+        .select() //select all
 
       if (error) {
         setFetchError(true)
@@ -55,7 +55,7 @@ function Calendar() {
       fetchDates()
     }
   }, [])
-   // Function to convert a datetime object to days and months (helper function)
+  // Function to convert a datetime object to days and months (helper function)
   const datetimeToDaysMonths = (dt: Date) => {
     return { day: dt.getDate(), month: dt.getMonth() + 1 }; // Months are 0-indexed, so add 1
   };
@@ -77,7 +77,7 @@ function Calendar() {
             {fetchError && <p>Erro ao buscar os dados.</p>}
             {!fetchError && dates.map((item) => (
               <CalendarItem>
-                <EventDetails item={item} /> 
+                <EventDetails item={item} />
               </CalendarItem>
             ))}
           </>
