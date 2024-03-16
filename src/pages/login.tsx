@@ -1,12 +1,19 @@
-import { useState, ChangeEvent, FormEvent } from "react"
-import supabase from "../../config/supabaseClient"
+import { useState, ChangeEvent, FormEvent, useEffect } from "react"
+import supabase from "../config/supabaseClient";
+import { useNavigate } from "react-router-dom";
 
 interface FormData {
   login: string;
   password: string;
 }
 
-const Login = ({ setToken }: any) => {
+const Login = ({ token, setToken }: any) => {
+  const navigate = useNavigate()
+
+  // redirect straight away of tokin is found
+  useEffect(() => {
+    if (sessionStorage.getItem('token')) navigate('/backend')
+  }, [])
 
   const [formData, setFormData] = useState<FormData>({ login: '', password: '' })
 
@@ -27,9 +34,10 @@ const Login = ({ setToken }: any) => {
       email: formData.login,
       password: formData.password
     })
-
-    setToken(data)
-    console.log(data);
+    if (!error) {
+      setToken(data)
+      navigate('/backend')
+    }
   }
 
   return (

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import supabase from "../../config/supabaseClient";
 
 interface CalendarItemObj {
   date: Date;
@@ -37,12 +38,16 @@ const InsertCalendarItem = () => {
     setShowConfirmationPopup(true);
   };
 
-  const handleConfirmation = (confirmed: boolean) => {
+  const handleConfirmation = async (confirmed: boolean) => {
     setShowConfirmationPopup(false);
 
     if (confirmed) {
       // Send data to the database (replace with your actual logic)
-      console.log("Calendar item data:", calendarItem);
+      const { error } = await supabase
+        .from('calendar')
+        .insert({ ...calendarItem })
+
+      console.log(error)
 
       // Clear form after successful submission (optional)
       setCalendarItem({

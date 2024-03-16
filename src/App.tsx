@@ -3,32 +3,38 @@ import './index.css'
 import './App.css';
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import LoginPage from '../src/pages/areaSecreta'
 import Home from '../src/pages/home'
 import BackendPage from './pages/backEndPages/backend';
+import Login from './pages/login';
 
 
 function App() {
-  const [token, setToken] = useState({});
+  const [token, setToken] = useState(null);
 
-  if (Object.keys(token).length !== 0) { // this weird if is so token is allways a type dict/JSON obj, refactor later
-    sessionStorage.setItem('token', JSON.stringify(token))
-  }
 
   useEffect(() => {
-    if (sessionStorage.getItem('token')) {
-      let data: JSON = JSON.parse(sessionStorage.getItem('token') || '') // this needs to have and more explicit type to remove the || ''
-      setToken(data)
+    if (token) {
+      sessionStorage.setItem('token', JSON.stringify(token))
     }
-  }, [])
+
+    const storedToken = sessionStorage.getItem('token');
+    if (storedToken) {
+      try {
+        const parsedToken = JSON.parse(storedToken);
+        setToken(parsedToken); // Set token only if parsing is successful
+      } catch (error) {
+        console.error('Error parsing token:', error);
+      }
+    }
+  }, [token, setToken]);
 
   return (
     <>
       <BrowserRouter>
         <Routes>
           <Route index element={<Home />}></Route>
-          <Route path="/login" element={<LoginPage setToken={setToken} />} />
-          <Route path='/backend' element={Object.keys(token).length !== 0 ? <BackendPage /> : null} /> {/* ugly if*/}
+          <Route path="/login" element={<Login token={token} setToken={setToken} />} />
+          <Route path='/backend' element={token ? <BackendPage /> : null} />
         </Routes>
       </BrowserRouter>
     </>
