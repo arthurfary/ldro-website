@@ -1,5 +1,6 @@
 import { useState } from "react";
 import supabase from "../../config/supabaseClient";
+import styled from "styled-components";
 
 interface CalendarItemObj {
   date: Date;
@@ -8,6 +9,15 @@ interface CalendarItemObj {
   venue: string; // nome do lugar
   location: string; // endereço
 }
+
+const PopUp = styled.div`
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+    align-self: center;
+
+`
+
 
 const InsertCalendarItem = () => {
   const [calendarItem, setCalendarItem] = useState<CalendarItemObj>({
@@ -47,7 +57,7 @@ const InsertCalendarItem = () => {
         .from('calendar')
         .insert({ ...calendarItem })
 
-      console.log(error)
+      console.log(error) // handle error
 
       // Clear form after successful submission (optional)
       setCalendarItem({
@@ -87,11 +97,11 @@ const InsertCalendarItem = () => {
       </form>
 
       {showConfirmationPopup && (
-        <div className="confirmationPopup">
+        <PopUp>
           <p>Send to database?</p>
           <button onClick={() => handleConfirmation(true)}>Sim</button>
           <button onClick={() => handleConfirmation(false)}>Não</button>
-        </div>
+        </PopUp>
       )}
     </div>
   );

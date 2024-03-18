@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "plugins": [{"name": "@styled/typescript-styled-plugin"}],
     "target": "es5",
     "lib": [
       "dom",
