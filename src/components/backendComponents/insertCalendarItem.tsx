@@ -14,9 +14,15 @@ const PopUp = styled.div`
   position: absolute;
   display: flex;
   flex-direction: column;
-    align-self: center;
-
+  align-self: center;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: auto;
+  background: #fff;
+  z-index: 10;
 `
+
 
 
 const InsertCalendarItem = () => {
@@ -70,32 +76,7 @@ const InsertCalendarItem = () => {
     }
   };
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="date">Date:</label>
-        <input
-          type="date"
-          id="date"
-          name="date"
-          value={calendarItem.date.toString()}
-          onChange={handleChange}
-          required // Mark as required
-        />
-        <label htmlFor="description">Descrição:</label>
-        <textarea id="description" name="description" value={calendarItem.description} onChange={handleChange} />
-
-        <label htmlFor="name">Nome:</label>
-        <input type="text" id="name" name="name" value={calendarItem.name} onChange={handleChange} required />
-
-        <label htmlFor="venue">Nome do lugar:</label>
-        <input type="text" id="venue" name="venue" value={calendarItem.venue} onChange={handleChange} required />
-
-        <label htmlFor="location">Localização:</label>
-        <input type="text" id="location" name="location" value={calendarItem.location} onChange={handleChange} required />
-
-        <button type="submit">Enviar</button>
-      </form>
-
+    <>
       {showConfirmationPopup && (
         <PopUp>
           <p>Send to database?</p>
@@ -103,7 +84,34 @@ const InsertCalendarItem = () => {
           <button onClick={() => handleConfirmation(false)}>Não</button>
         </PopUp>
       )}
-    </div>
+      <div style={{ position: 'relative' }}>
+        <form onSubmit={handleSubmit}>
+          <label htmlFor="date">Date:</label>
+          <input
+            type="date"
+            id="date"
+            name="date"
+            value={calendarItem.date.toString()}
+            onChange={handleChange}
+            required // Mark as required
+          />
+          <label htmlFor="description">Descrição:</label>
+          <textarea id="description" name="description" value={calendarItem.description} onChange={handleChange} />
+
+          <label htmlFor="name">Nome:</label>
+          <input type="text" id="name" name="name" value={calendarItem.name} onChange={handleChange} required />
+
+          <label htmlFor="venue">Nome do lugar:</label>
+          <input type="text" id="venue" name="venue" value={calendarItem.venue} onChange={handleChange} required />
+
+          <label htmlFor="location">Localização:</label>
+          <input type="text" id="location" name="location" value={calendarItem.location} onChange={handleChange} required />
+
+          <button type="submit">Enviar</button>
+        </form>
+      </div>
+
+    </>
   );
 };
 
