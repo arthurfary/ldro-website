@@ -1,4 +1,4 @@
-import EditCalendarItem from "../../components/backendComponents/editCalendarItem"
+import ListCalendarItems from "../../components/backendComponents/listCalendarItems"
 import InsertCalendarItem from "../../components/backendComponents/insertCalendarItem"
 
 const BackendPage = () => {
@@ -6,7 +6,7 @@ const BackendPage = () => {
     <>
       <h1>This is the BackEnd</h1> {/* here will be the config page to add new content */}
       <InsertCalendarItem />
-      <EditCalendarItem />
+      <ListCalendarItems />
     </>
   )
 }

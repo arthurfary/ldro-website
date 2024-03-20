@@ -1,90 +1,100 @@
-import styled from "styled-components";
+import { useState } from "react";
+import { CalendarItemType as CalendarItemType } from "../calendar/calendarItemInterface"
 import supabase from "../../config/supabaseClient";
-import { useState, useEffect } from "react";
+import styled from "styled-components";
 
-interface ScheduleItem {
-  id: number;
-  date: Date;
-  description: string;
-  name: string;
-  venue: string; // nome do lugar
-  location: string, // endereço
-}
-
-const DateRow = styled.div`
-display: grid;
-grid-template-columns: 1fr 2fr 2fr 3fr 3fr 3fr 1fr;
-grid-template-rows: 1fr;
-
-width: 100%;
-background: #00F;
-justify-content: space-evenly;
+const PopUp = styled.div`
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  align-self: center;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: auto;
+  background: #fff;
+  z-index: 10;
 `
 
-const RowCreator = ({ id, date, name, description, venue, location }: ScheduleItem) => {
-  return (
-    <DateRow>
-      <p>{id}</p>
-      <p>{date.toString()}</p>
-      <p>{name}</p>
-      <p>{description}</p>
-      <p>{venue}</p>
-      <p>{location}</p>
-      <a>editar</a>
-    </DateRow>
-  )
-}
+const EditForm = styled.div`
+display: flex;
+flex-direction: row;
+`
 
-const EditCalendarItem = () => {
+const EditCalendarItem = ({ id, date, name, description, venue, location, setOpenEdit }: CalendarItemType | any) => {
+  const [calendarItem, setCalendarItem] = useState<CalendarItemType>({ ...{ date, name, description, venue, location } })
+  const [showConfirmationPopup, setShowConfirmationPopup] = useState(false);
 
-  const [dates, setDates] = useState<ScheduleItem[]>([])
-  const [fetchError, setFetchError] = useState<boolean>(false)
-  const [loading, setLoading] = useState(false)
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setCalendarItem({ ...calendarItem, [event.target.name]: event.target.value });
+  };
 
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
 
-  useEffect(() => {
-    const fetchDates = async () => {
-      setLoading(true)
+    // Validate date (greater than today)
+    if (new Date(calendarItem.date) <= new Date()) {
+      alert("Please select a date in the future.");
+      return;
+    }
 
-      const { data, error } = await supabase
+    // Show confirmation popup
+    setShowConfirmationPopup(true);
+  };
+
+  const handleConfirmation = async (confirmed: boolean) => {
+    setShowConfirmationPopup(false);
+
+    if (confirmed) {
+      // Send data to the database (replace with your actual logic)
+      const { error } = await supabase
         .from('calendar')
-        .select() //select all
+        .update({ ...calendarItem })
+        .eq('id', id)
 
-      if (error) {
-        setFetchError(true)
-        console.log(error)
-        setDates([])
-      }
-      if (data) {
-        setDates(data)
-        setFetchError(false)
-      }
-
-      setLoading(false)
+      console.log(error) // handle error
+      setOpenEdit(false)
     }
-
-    return () => {
-      fetchDates()
-    }
-  }, [])
+  };
 
 
   return (
-    <div>
-      {dates &&
-        dates.map((date) => (
-          <RowCreator
-            id={date.id}
-            date={date.date}
-            name={date.name}
-            description={date.description}
-            venue={date.venue}
-            location={date.location}
+    <>{showConfirmationPopup && (
+      <PopUp>
+        <p>Send to database?</p>
+        <button onClick={() => handleConfirmation(true)}>Sim</button>
+        <button onClick={() => handleConfirmation(false)}>Não</button>
+      </PopUp>
+    )}
+      <EditForm style={{ position: 'relative' }}>
+        <form onSubmit={handleSubmit}>
+          <label htmlFor="date">Date:</label>
+          <input
+            type="date"
+            id="date"
+            name="date"
+            value={calendarItem.date.toString()}
+            onChange={handleChange}
+            required // Mark as required
           />
-        ))
-      }
-    </div>
+          <label htmlFor="description">Descrição:</label>
+          <textarea id="description" name="description" value={calendarItem.description} onChange={handleChange} />
+
+          <label htmlFor="name">Nome:</label>
+          <input type="text" id="name" name="name" value={calendarItem.name} onChange={handleChange} required />
+
+          <label htmlFor="venue">Nome do lugar:</label>
+          <input type="text" id="venue" name="venue" value={calendarItem.venue} onChange={handleChange} required />
+
+          <label htmlFor="location">Localização:</label>
+          <input type="text" id="location" name="location" value={calendarItem.location} onChange={handleChange} required />
+
+          <button type="submit">Enviar</button>
+        </form>
+      </EditForm>
+    </>
   )
 }
 
-export default EditCalendarItem;
+export default EditCalendarItem
+
