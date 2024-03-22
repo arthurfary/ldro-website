@@ -14,7 +14,7 @@ interface ScheduleItem {
 
 const DateRow = styled.div`
 display: grid;
-grid-template-columns: 1fr 2fr 2fr 3fr 3fr 3fr 1fr;
+grid-template-columns: 1fr 2fr 2fr 3fr 3fr 3fr 1fr 1fr;
 grid-template-rows: 1fr;
 
 width: 100%;
@@ -24,20 +24,38 @@ justify-content: space-evenly;
 
 const RowCreator = ({ id, date, name, description, venue, location }: ScheduleItem) => {
   const [openEdit, setOpenEdit] = useState(false)
+  const [isDeleted, setIsDeleted] = useState(false)
+
+  async function deleteItem(id: number) {
+    const { error } = await supabase
+      .from('calendar')
+      .delete()
+      .eq('id', id)
+
+    if (!error) {
+      setIsDeleted(true)
+    }
+  }
 
   return (
     <>
-      <DateRow>
-        <p>{id}</p>
-        <p>{date.toString()}</p>
-        <p>{name}</p>
-        <p>{description}</p>
-        <p>{venue}</p>
-        <p>{location}</p>
-        <button onClick={() => { setOpenEdit(!openEdit) }}>Edit</button>
-      </DateRow>
-      {openEdit && (
-        <EditCalendarItem {...{ id, date, name, description, venue, location }} setOpenEdit={setOpenEdit} />
+      {!isDeleted && (<> {/* precisa ficar mais claro o que esta acontecendo */}
+        <DateRow>
+          <p>{id}</p>
+          <p>{date.toString()}</p>
+          <p>{name}</p>
+          <p>{description}</p>
+          <p>{venue}</p>
+          <p>{location}</p>
+          <button onClick={() => { setOpenEdit(!openEdit) }}>Edit</button>
+          <button onClick={() => { deleteItem(id) }}>Delete</button> {/* add popup for deletion */}
+        </DateRow>
+        {openEdit && (
+          <EditCalendarItem {...{ id, date, name, description, venue, location }} setOpenEdit={setOpenEdit} />
+        )}
+      </>)}
+      {isDeleted && (
+        <p>deletado</p>
       )}
     </>
   )
