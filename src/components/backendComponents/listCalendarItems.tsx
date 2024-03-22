@@ -110,6 +110,7 @@ const ListCalendarItems = () => {
         ))
       }
       {loading && (<h2>Carregando...</h2>)}
+      {fetchError && (<h2>Um erro ocorreu</h2>)}
     </div>
   )
 }
