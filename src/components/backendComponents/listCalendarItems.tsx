@@ -84,6 +84,7 @@ const ListCalendarItems = () => {
       if (data) {
         setDates(data)
         setFetchError(false)
+        console.log(dates)
       }
 
       setLoading(false)
@@ -91,12 +92,14 @@ const ListCalendarItems = () => {
 
     return () => {
       fetchDates()
+
     }
   }, [])
 
 
   return (
     <div>
+      <p>datas:</p>
       {dates &&
         dates.map((date) => (
           <RowCreator
