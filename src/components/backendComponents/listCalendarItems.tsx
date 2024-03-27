@@ -68,32 +68,28 @@ const ListCalendarItems = () => {
   const [loading, setLoading] = useState(false)
 
 
+  async function fetchDates() {
+    setLoading(true)
+
+    const { data, error } = await supabase
+      .from('calendar')
+      .select() //select all
+
+    if (error) {
+      setFetchError(true)
+      console.log(error)
+      setDates([])
+    }
+    if (data) {
+      setDates(data)
+      setFetchError(false)
+      console.log(dates)
+    }
+
+    setLoading(false)
+  }
   useEffect(() => {
-    const fetchDates = async () => {
-      setLoading(true)
-
-      const { data, error } = await supabase
-        .from('calendar')
-        .select() //select all
-
-      if (error) {
-        setFetchError(true)
-        console.log(error)
-        setDates([])
-      }
-      if (data) {
-        setDates(data)
-        setFetchError(false)
-        console.log(dates)
-      }
-
-      setLoading(false)
-    }
-
-    return () => {
-      fetchDates()
-
-    }
+    fetchDates()
   }, [])
 
 

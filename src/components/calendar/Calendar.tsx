@@ -30,30 +30,30 @@ function Calendar() {
   const [fetchError, setFetchError] = useState<boolean>(false)
   const [loading, setLoading] = useState(false)
 
+
+  async function fetchDates() {
+    setLoading(true)
+
+    const { data, error } = await supabase
+      .from('calendar')
+      .select() //select all
+
+    if (error) {
+      setFetchError(true)
+      console.log(error)
+      setDates([])
+    }
+    if (data) {
+      setDates(data)
+      setFetchError(false)
+    }
+
+    setLoading(false)
+  }
+
+
   useEffect(() => {
-    const fetchDates = async () => {
-      setLoading(true)
-
-      const { data, error } = await supabase
-        .from('calendar')
-        .select() //select all
-
-      if (error) {
-        setFetchError(true)
-        console.log(error)
-        setDates([])
-      }
-      if (data) {
-        setDates(data)
-        setFetchError(false)
-      }
-
-      setLoading(false)
-    }
-
-    return () => {
-      fetchDates()
-    }
+    fetchDates()
   }, [])
   // Function to convert a datetime object to days and months (helper function)
   const datetimeToDaysMonths = (dt: Date) => {
@@ -73,15 +73,15 @@ function Calendar() {
         {loading ? (
           <p>Carregando...</p>
         ) : (
-          <>
-            {fetchError && <p>Erro ao buscar os dados.</p>}
-            {!fetchError && dates.map((item) => (
-              <CalendarItem>
-                <EventDetails item={item} />
-              </CalendarItem>
-            ))}
-          </>
-        )}
+            <>
+              {fetchError && <p>Erro ao buscar os dados.</p>}
+              {!fetchError && dates.map((item) => (
+                <CalendarItem>
+                  <EventDetails item={item} />
+                </CalendarItem>
+              ))}
+            </>
+          )}
       </CalendarBg>
     </div>
   );
