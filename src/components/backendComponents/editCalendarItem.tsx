@@ -46,7 +46,6 @@ const EditCalendarItem = ({ id, date, name, description, venue, location, setOpe
     setShowConfirmationPopup(false);
 
     if (confirmed) {
-      // Send data to the database (replace with your actual logic)
       const { error } = await supabase
         .from('calendar')
         .update({ ...calendarItem })
