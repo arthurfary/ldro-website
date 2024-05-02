@@ -1,44 +1,49 @@
-import React, { useEffect, useState } from 'react';
-import './index.css'
-import './App.css';
+import React, { useState, useEffect } from "react";
+import "./index.css";
+import "./App.css";
 
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Home from '../src/pages/home'
-import BackendPage from './pages/backEndPages/backend';
-import Login from './pages/login';
-
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "../src/pages/home";
+import BackendPage from "./pages/backEndPages/backend";
+import Login from "./pages/login";
+import supabase from "./config/supabaseClient"; // Import supabase
+import { Session } from "@supabase/supabase-js";
 
 function App() {
-  const [token, setToken] = useState(null);
+    const [session, setSession] = useState<Session | null>(null);
 
+    useEffect(() => {
+        const fetchSession = async () => {
+            const {
+                data: { session },
+            } = await supabase.auth.getSession();
+            setSession(session);
+        };
 
-  useEffect(() => {
-    if (token) {
-      sessionStorage.setItem('token', JSON.stringify(token))
-    }
+        supabase.auth.onAuthStateChange((_event, session) =>
+            setSession(session)
+        );
 
-    const storedToken = sessionStorage.getItem('token');
-    if (storedToken) {
-      try {
-        const parsedToken = JSON.parse(storedToken);
-        setToken(parsedToken); // Set token only if parsing is successful
-      } catch (error) {
-        console.error('Error parsing token:', error);
-      }
-    }
-  }, [token, setToken]);
+        fetchSession(); // Fetch session on initial render
+    }, []);
 
-  return (
-    <>
-      <BrowserRouter>
-        <Routes>
-          <Route index element={<Home />}></Route>
-          <Route path="/login" element={<Login token={token} setToken={setToken} />} />
-          <Route path='/backend' element={token ? <BackendPage /> : null} />
-        </Routes>
-      </BrowserRouter>
-    </>
-  );
+    return (
+        <>
+            <BrowserRouter>
+                <Routes>
+                    <Route index element={<Home />}></Route>
+                    <Route
+                        path="/login"
+                        element={<Login setSession={setSession} />} // Pass setSession to Login
+                    />
+                    <Route
+                        path="/backend"
+                        element={session ? <BackendPage /> : null} // Render BackendPage only if session exists
+                    />
+                </Routes>
+            </BrowserRouter>
+        </>
+    );
 }
 
 export default App;
