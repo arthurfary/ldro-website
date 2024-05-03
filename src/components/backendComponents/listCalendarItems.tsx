@@ -4,12 +4,12 @@ import { useState, useEffect } from "react";
 import EditCalendarItem from "./editCalendarItem";
 
 interface ScheduleItem {
-    id: number;
-    date: Date;
-    description: string;
-    name: string;
-    venue: string;
-    location: string;
+  id: number;
+  date: Date;
+  description: string;
+  name: string;
+  venue: string;
+  location: string;
 }
 
 const DateRow = styled.div`
@@ -68,104 +68,104 @@ const TableHeader = styled.div`
 `;
 
 const RowCreator = ({
-    id,
-    date,
-    name,
-    description,
-    venue,
-    location,
+  id,
+  date,
+  name,
+  description,
+  venue,
+  location,
 }: ScheduleItem) => {
-    const [openEdit, setOpenEdit] = useState(false);
-    const [isDeleted, setIsDeleted] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [isDeleted, setIsDeleted] = useState(false);
 
-    async function deleteItem(id: number) {
-        const { error } = await supabase.from("calendar").delete().eq("id", id);
+  async function deleteItem(id: number) {
+    const { error } = await supabase.from("calendar").delete().eq("id", id);
 
-        if (!error) {
-            setIsDeleted(true);
-        }
+    if (!error) {
+      setIsDeleted(true);
     }
+  }
 
-    return (
-        <>
-            {!isDeleted && (
-                <DateRow>
-                    <p>{id}</p>
-                    <p>{date.toString()}</p>
-                    <p>{name}</p>
-                    <p>{description}</p>
-                    <p>{venue}</p>
-                    <p>{location}</p>
-                    <EditButton onClick={() => setOpenEdit(!openEdit)}>
-                        Edit
-                    </EditButton>
-                    <DeleteButton onClick={() => deleteItem(id)}>
-                        Delete
-                    </DeleteButton>
-                    {openEdit && (
-                        <EditCalendarItem
-                            {...{
-                                id,
-                                date,
-                                name,
-                                description,
-                                venue,
-                                location,
-                            }}
-                            setOpenEdit={setOpenEdit}
-                        />
-                    )}
-                </DateRow>
-            )}
-            {isDeleted && <p>deletado</p>}
-        </>
-    );
+  return (
+    <>
+      {!isDeleted && (
+        <DateRow>
+          <p>{id}</p>
+          <p>{date.toString()}</p>
+          <p>{name}</p>
+          <p>{description}</p>
+          <p>{venue}</p>
+          <p>{location}</p>
+          <EditButton onClick={() => setOpenEdit(!openEdit)}>
+            Edit
+          </EditButton>
+          <DeleteButton onClick={() => deleteItem(id)}>
+            Delete
+          </DeleteButton>
+          {openEdit && (
+            <EditCalendarItem
+              {...{
+                id,
+                date,
+                name,
+                description,
+                venue,
+                location,
+              }}
+              setOpenEdit={setOpenEdit}
+            />
+          )}
+        </DateRow>
+      )}
+      {isDeleted && <p>deletado</p>}
+    </>
+  );
 };
 
 const ListCalendarItems = () => {
-    const [dates, setDates] = useState<ScheduleItem[]>([]);
-    const [fetchError, setFetchError] = useState<boolean>(false);
-    const [loading, setLoading] = useState(false);
+  const [dates, setDates] = useState<ScheduleItem[]>([]);
+  const [fetchError, setFetchError] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
 
-    const fetchDates = async () => {
-        try {
-            setLoading(true);
-            const { data, error } = await supabase.from("calendar").select();
-            if (error) throw error;
-            setDates(data);
-            setFetchError(false);
-        } catch (error) {
-            setFetchError(true);
-            console.error(error);
-        } finally {
-            setLoading(false);
-        }
-    };
+  const fetchDates = async () => {
+    try {
+      setLoading(true);
+      const { data, error } = await supabase.from("calendar").select();
+      if (error) throw error;
+      setDates(data);
+      setFetchError(false);
+    } catch (error) {
+      setFetchError(true);
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    useEffect(() => {
-        fetchDates();
-    }, []);
+  useEffect(() => {
+    fetchDates();
+  }, []);
 
-    return (
-        <div>
-            <h1>Datas:</h1>
-            <TableHeader>
-                <p>ID</p>
-                <p>Date</p>
-                <p>Name</p>
-                <p>Description</p>
-                <p>Venue</p>
-                <p>Location</p>
-                <p>Edit</p>
-                <p>Delete</p>
-            </TableHeader>
-            {dates.map((date) => (
-                <RowCreator {...date} key={date.id} />
-            ))}
-            {loading && <h2>Carregando...</h2>}
-            {fetchError && <h2>Um erro ocorreu</h2>}
-        </div>
-    );
+  return (
+    <div>
+      <h1>Datas:</h1>
+      <TableHeader>
+        <p>ID</p>
+        <p>Date</p>
+        <p>Name</p>
+        <p>Description</p>
+        <p>Venue</p>
+        <p>Location</p>
+        <p>Edit</p>
+        <p>Delete</p>
+      </TableHeader>
+      {dates.map((date) => (
+        <RowCreator {...date} key={date.id} />
+      ))}
+      {loading && <h2>Carregando...</h2>}
+      {fetchError && <h2>Um erro ocorreu</h2>}
+    </div>
+  );
 };
 
 export default ListCalendarItems;
